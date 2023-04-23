@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/octicons.min.css" integrity="sha512-vRKfvnKTq7yKgS+JJvcXv0WX7mQt/8rNDvABL+cDIPPjl4qUiZrfK24ORLn5nmaIvRy+ONQ1+0V0muCoqaQ/jQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+      body{
+        background-color:tomato;
+      }
+      .palette{
+        position: absolute;
+        top: 8px;
+        left: 50px;
+        width: 100px;
+        height: 10px;
+        z-index:1;
+        box-shadow: 5px 5px 10px black;
+        
+
+      }
+      .palette{
+        display: flex;
+      }
+      canvas{
+        box-sizing: border-box;
+        border: solid 2px lightgreen;
+        background-color: azure;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 25px;
+        margin: auto;
+        box-shadow: 5px 5px 5px rgb(68, 67, 67);
+        
+        border-radius: 5px;
+      }
+      .color{
+        position: relative;
+        box-sizing: border-box;
+        width: 10px;
+        height: 10px; 
+      }
+      #white{
+        background-color:white;
+      }
+      #green{
+        background-color:green;
+      }
+      #blue{
+        background-color:blue;
+      }
+      #orange{
+        background-color: orange;
+      }      
+      #black{
+        background-color:black;
+      }
+      #red{
+        background-color:red;
+      }
+      #yellow{
+        background-color:yellow;
+       }
+       #violet{
+        background-color:violet;
+       }
+       #sky{
+        background-color:lightskyblue;
+       }
+       #lightgreen{
+        background-color:lightgreen;
+       }
+       #brown{
+        background-color:rgb(128, 74, 74);
+       }
+       .tools{
+        position:absolute; 
+        top:2px;
+        left:170px;
+        
+       }
+    </style>
+</head>
+<body>
+    <br>
+    
+      <div class="palette">
+        <div class='color' id='white'></div>
+        <div class='color' id='green'></div>
+        <div class='color' id='blue'></div>
+        <div class='color' id='orange'></div>
+        <div class='color' id='black'></div>
+        <div class='color' id='red'></div>
+        <div class='color' id='yellow'></div>
+        <div class='color' id='violet'></div>
+        <div class='color' id='sky'></div>
+        <div class='color' id='lightgreen'></div>
+        <div class='color' id='brown'></div>
+    </div>
+    <div class="tools">
+      <img class="tool" name='lapiz' src="Assets/lapiz.png" width="18px" height="auto" alt="">
+      <img class="tool" name='marcador' src="Assets/marcador.png" width="18px" height="auto" alt="">
+      <img class="tool" name='borrador' src="Assets/borrador.png" width="18px" height="auto" alt="">
+    </div>
+    
+    
+    <canvas width="600" height="400"></canvas>
+
+<script>
+     
+    const pantalla = document.querySelector('canvas');
+    const pincel = pantalla.getContext('2d');
+    const colors=document.querySelectorAll('.color');
+    const colorsArray=Array.from(colors);
+    const tools=document.querySelectorAll('.tool');
+    const toolsArray=Array.from(tools);
+    
+    
+    let color='black';
+    let tool=''
+
+     for(let i =0; i<colorsArray.length; i++){
+        colorsArray[i].addEventListener('click',(event)=>{
+          let computedStyle=getComputedStyle(colorsArray[i]);
+          let backgroundColor=computedStyle.backgroundColor;
+          color=backgroundColor;
+          console.log(backgroundColor);
+          console.log(color);
+
+        })
+     }
+     for(let i =0; i<toolsArray.length; i++){
+        toolsArray[i].addEventListener('click',(event)=>{
+        let {name}=event.target;
+        tool=name;
+        console.log(tool);
+      })
+     }
+    pincel.fillStyle = 'azure';
+    pincel.fillRect(0, 0, 600, 400);
+
+    let puedoDibujar = false;
+    function dibujar(evento) {
+      var x = evento.pageX - pantalla.offsetLeft;
+      var y = evento.pageY - pantalla.offsetTop;
+      pincel.fillStyle = color;
+        if(puedoDibujar) {
+            if(tool=='marcador'){
+              pincel.beginPath();
+              pincel.arc(x, y, 5, 0, 2 * 3.14);
+              pincel.fill(); 
+            }else if(tool=='lapiz'){
+              pincel.fillStyle='color';
+              pincel.fillRect(x,y,1,1); 
+            }else if(tool=='borrador'){
+              pincel.fillStyle ='azure';
+              pincel.beginPath();
+              pincel.arc(x, y, 5, 0, 2 * 3.14);
+              pincel.fill();
+            }
+        }
+
+    }
+
+    pantalla.onmousemove = dibujar;
+
+    function habilitarDibujar() {
+
+        puedoDibujar = true;
+    }
+
+    function deshabilitarDibujar() {
+
+        puedoDibujar = false;
+    }
+
+    pantalla.onmousedown = habilitarDibujar;
+
+    pantalla.onmouseup = deshabilitarDibujar;
+
+</script>    
+</body>
+</html>
